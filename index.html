@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Calculator & Stopwatch</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      gap: 40px;
+      padding: 30px;
+      background: linear-gradient(135deg, #f0f4ff, #eaf7ff);
+    }
+
+    /* Card Style */
+    .card {
+      background: #fff;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 6px 15px rgba(0,0,0,0.15);
+      width: 280px;
+      transition: transform 0.2s ease;
+    }
+    .card:hover {
+      transform: translateY(-5px);
+    }
+
+    /* Calculator */
+    .calculator input {
+      width: 100%;
+      height: 45px;
+      margin-bottom: 12px;
+      text-align: right;
+      font-size: 20px;
+      padding: 8px;
+      border: 2px solid #12347d;
+      border-radius: 6px;
+      background: #f9f9f9;
+    }
+    .calculator button {
+      width: 60px;
+      height: 45px;
+      margin: 6px;
+      font-size: 16px;
+      cursor: pointer;
+      border: none;
+      border-radius: 6px;
+      background: #12347d;
+      color: #fff;
+      transition: background 0.3s;
+    }
+    .calculator button:hover {
+      background: #0d255a;
+    }
+
+    /* Stopwatch */
+    .stopwatch h2 {
+      margin-bottom: 20px;
+      color: #12347d;
+    }
+    .time-display {
+      font-size: 32px;
+      margin-bottom: 20px;
+      font-weight: bold;
+      color: #444;
+    }
+    .stopwatch button {
+      margin: 6px;
+      padding: 10px 16px;
+      font-size: 14px;
+      cursor: pointer;
+      border: none;
+      border-radius: 6px;
+      background: #12347d;
+      color: #fff;
+      transition: background 0.3s;
+    }
+    .stopwatch button:hover {
+      background: #0d255a;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      body {
+        flex-direction: column;
+        align-items: center;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Calculator -->
+  <div class="card calculator">
+    <input type="text" id="display" disabled>
+    <div>
+      <button onclick="clearDisplay()">C</button>
+      <button onclick="appendValue('/')">÷</button>
+      <button onclick="appendValue('*')">×</button>
+      <button onclick="appendValue('-')">−</button>
+    </div>
+    <div>
+      <button onclick="appendValue('7')">7</button>
+      <button onclick="appendValue('8')">8</button>
+      <button onclick="appendValue('9')">9</button>
+      <button onclick="appendValue('+')">+</button>
+    </div>
+    <div>
+      <button onclick="appendValue('4')">4</button>
+      <button onclick="appendValue('5')">5</button>
+      <button onclick="appendValue('6')">6</button>
+      <button onclick="calculate()">=</button>
+    </div>
+    <div>
+      <button onclick="appendValue('1')">1</button>
+      <button onclick="appendValue('2')">2</button>
+      <button onclick="appendValue('3')">3</button>
+    </div>
+    <div>
+      <button onclick="appendValue('0')">0</button>
+      <button onclick="appendValue('.')">.</button>
+    </div>
+  </div>
+
+  <!-- Stopwatch -->
+  <div class="card stopwatch">
+    <h2>Stopwatch</h2>
+    <div class="time-display" id="time">00:00:00</div>
+    <button onclick="startStop()">Start / Stop</button>
+    <button onclick="reset()">Reset</button>
+  </div>
+
+  <script>
+    // Calculator Functions
+    function appendValue(val) {
+      document.getElementById('display').value += val;
+    }
+    function clearDisplay() {
+      document.getElementById('display').value = '';
+    }
+    function calculate() {
+      try {
+        document.getElementById('display').value =
+          eval(document.getElementById('display').value);
+      } catch {
+        document.getElementById('display').value = 'Error';
+      }
+    }
+
+    // Stopwatch Functions
+    let timer;
+    let seconds = 0;
+    let running = false;
+
+    function startStop() {
+      if (!running) {
+        running = true;
+        timer = setInterval(updateTime, 1000);
+      } else {
+        running = false;
+        clearInterval(timer);
+      }
+    }
+
+    function reset() {
+      clearInterval(timer);
+      running = false;
+      seconds = 0;
+      document.getElementById('time').textContent = "00:00:00";
+    }
+
+    function updateTime() {
+      seconds++;
+      let hrs = Math.floor(seconds / 3600);
+      let mins = Math.floor((seconds % 3600) / 60);
+      let secs = seconds % 60;
+
+      document.getElementById('time').textContent =
+        `${hrs.toString().padStart(2,'0')}:${mins.toString().padStart(2,'0')}:${secs.toString().padStart(2,'0')}`;
+    }
+  </script>
+
+</body>
+</html>
